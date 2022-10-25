@@ -2,7 +2,7 @@ import sys, threading, time
 from six.moves import queue # python3 queue
 
 class Reader:
-    def __init__(stream, max_size, limit_num_buffered=None, drop_timeout=None, transform_cb=None):
+    def __init__(self, stream, max_size, limit_num_buffered=None, drop_timeout=None, transform_cb=None):
         '''
         Wraps a stream to read from it in a nonblocking manner, by using a reader thread, as per
         https://stackoverflow.com/questions/375427/a-non-blocking-read-on-a-subprocess-pipe-in-python/4896288#4896288
