@@ -1,0 +1,18 @@
+[build-system]
+requires = ['setuptools>=61.0']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'nonblocking_stream_queue'
+version = '0.1.0',
+description = 'Nonblocking stream reads using Queue and a pump thread'
+readme = 'README.md'
+classifiers = [
+  'Programming Language :: Python :: 3',
+  'License :: Public Domain',
+  'Operating System :: OS Independent',
+]
+
+[project.urls]
+'Homepage' = 'https://github.com/xloem/nonblocking_stream_queue'
+'Bug Tracker' = 'https://github.com/xloem/nonblocking_stream_queue/issues'

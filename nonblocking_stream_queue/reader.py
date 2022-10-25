@@ -1,5 +1,8 @@
 import sys, threading, time
-from six.moves import queue # python2/python3 queue
+try:
+    import queue
+except:
+    import Queue as queue # python2
 
 class Reader:
     def __init__(self, stream, max_size=-1, lines=False, max_count=None, drop_timeout=None, transform_cb=None):
