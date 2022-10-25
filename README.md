@@ -11,11 +11,20 @@ When constructed, the reader spawns a thread and reads everything from the strea
     import sys
     import nonblocking
     
-    reader = nonblocking.Reader(sys.stdin, 4096, limit_num_buffered=None, drop_timeout=None, transform_cb=None)
+    reader = nonblocking.Reader(
+        sys.stdin,
+        max_size=4096,
+        lines=False,
+        max_count=None,
+        drop_timeout=None,
+        transform_cb=None
+    )
 
     print(reader.read_one()) # outputs up to 4096 characters, or None if nothing queued
     print(reader.read_many()) # outputs all 4096 character chunks queued
     print(''.join(reader.read_many())) # outputs all queued text
+    reader.block() # waits for data to be present or end, returns number of reads queued
+    reader.is_pumping() # False if data has ended
 
 ### Timestamping
 
@@ -23,15 +32,25 @@ When constructed, the reader spawns a thread and reads everything from the strea
     import nonblocking
     
     reader = nonblocking.Reader(
-        sys.stdin,
-        0,
-        limit_num_buffered=None,
-        drop_timeout=None,
+        sys.stdin.buffer,
         transform_cb=lambda data: (time.time(), data)
     )
 
-    while True:
-        print(*reader.read_one(block=True)) # shows the timestamp each item was buffered
+    while reader.block():
+        print(*reader.read_one()) # shows the timestamp each item was buffered
+
+## Lines
+
+    import sys
+    import nonblocking
+    
+    reader = nonblocking.Reader(
+        sys.stdin,
+        lines=True
+    )
+
+    while reader.block():
+        print(reader.read_one().rstrip()) # outputs each line of text that is input
 
 ## Other solutions
 
