@@ -8,6 +8,9 @@ A simple nonblocking queue reader is provided, with implementation from https://
 
 When constructed, the reader spawns a thread and reads everything from the stream, until garbage collection or EOF.
 
+## Installation
+    $ python3 -m pip install nonblocking-stream-queue
+
 ## Usage
 
     import sys
