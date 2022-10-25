@@ -42,7 +42,8 @@ class Reader:
 
     def _pump(self):
         while not self.stream.closed:
-            data = self.stream.read(self.max_size)
+            data = self.stream.read(self.max_size or -1)
+            
             if data is None:
                 time.sleep(0.01)
             elif len(data) == 0:
