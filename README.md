@@ -6,7 +6,7 @@ It could be expanded for general nonblocking usage if desired.
 
 A simple nonblocking queue reader is provided, with implementation from https://stackoverflow.com/questions/375427/a-non-blocking-read-on-a-subprocess-pipe-in-python/4896288#4896288 .
 
-When constructed, the reader spawns a thread and reads everything from the stream.
+When constructed, the reader spawns a thread and begins reading everything from the stream.
 
 ## Installation
     $ python3 -m pip install nonblocking-stream-queue
