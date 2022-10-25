@@ -49,14 +49,15 @@ class Reader:
             return None
 
     def read_many(self):
-        return [*iter(self)]
+        return list(self)
 
     def is_pumping(self):
         return self._is_pumping and self.thread.is_alive()
 
-    def block(self, timeout=None, num_read=1):
+    def block(self, timeout=None, for_ct_read=1):
         with self.condition:
-            self.condition.wait_for(lambda: self.queue.qsize() >= num_read or not self.is_pumping(), timeout)
+            if self.queue.qsize() < for_ct_read and self.is_pumping():
+                self.condition.wait(timeout)
             return self.queue.qsize()
 
     def _pump(self):
