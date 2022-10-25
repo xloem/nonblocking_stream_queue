@@ -3,12 +3,12 @@
 from setuptools import setup, find_packages
 
 setup(
-  name='nonblocking',
+  name='nonblocking_stream_queue',
   version='0.1.0',
   description='Nonblocking stream reads using Queue and a pump thread',
   long_description=open('README.md').read(),
   long_description_content_type='text/markdown',
-  url='https://github.com/xloem/nonblocking',
+  url='https://github.com/xloem/nonblocking_stream_queue',
   keywords=[],
   classifiers=[
     'Programming Language :: Python :: 3',

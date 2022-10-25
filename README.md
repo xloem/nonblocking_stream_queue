@@ -1,15 +1,17 @@
-# Nonblocking
+# Nonblocking Stream Queue
 
-This is a simple python package for nonblocking use of streams.
+This is a simple python package for nonblocking reading from streams.
 
-At the moment, a simple nonblocking queue reader is provided, with implementation from https://stackoverflow.com/questions/375427/a-non-blocking-read-on-a-subprocess-pipe-in-python/4896288#4896288 .
+It could be expanded for general nonblocking usage if desired.
 
-When constructed, the reader spawns a thread and reads everything from the stream, until it is either garbage collected or EOF is reached.
+A simple nonblocking queue reader is provided, with implementation from https://stackoverflow.com/questions/375427/a-non-blocking-read-on-a-subprocess-pipe-in-python/4896288#4896288 .
+
+When constructed, the reader spawns a thread and reads everything from the stream, until garbage collection or EOF.
 
 ## Usage
 
     import sys
-    import nonblocking
+    import nonblocking_stream_queue as nonblocking
     
     reader = nonblocking.Reader(
         sys.stdin,
@@ -29,7 +31,7 @@ When constructed, the reader spawns a thread and reads everything from the strea
 ### Timestamping
 
     import sys, time
-    import nonblocking
+    import nonblocking_stream_queue as nonblocking
     
     reader = nonblocking.Reader(
         sys.stdin.buffer,
@@ -42,7 +44,7 @@ When constructed, the reader spawns a thread and reads everything from the strea
 ## Lines
 
     import sys
-    import nonblocking
+    import nonblocking_stream_queue as nonblocking
     
     reader = nonblocking.Reader(
         sys.stdin,
