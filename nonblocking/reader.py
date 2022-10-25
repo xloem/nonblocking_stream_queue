@@ -30,13 +30,15 @@ class Reader:
                 yield self.queue.get_nowait()
             except queue.Empty:
                 return
-    def read_one(self):
+
+    def read_one(self, block=False, timeout=None):
         try:
-            return self.queue.get_nowait()
+            return self.queue.get(block=block, timeout=timeout)
         except queue.Empty:
             return None
-    def read_many(self):
-        return [*iter(self)]
+
+    def read_many(self, block=False, timeout=None):
+        return [self.read_one(block, timeout), *iter(self)]
 
     def _pump(self):
         while not self.stream.closed:
