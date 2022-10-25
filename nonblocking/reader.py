@@ -32,8 +32,7 @@ class Reader:
                 return
     def read_one(self):
         try:
-            with self.lock:
-                return self.queue.get_nowait()
+            return self.queue.get_nowait()
         except queue.Empty:
             return None
     def read_many(self):
