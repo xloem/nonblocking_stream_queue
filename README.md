@@ -8,6 +8,7 @@ When constructed, the reader spawns a thread and reads everything from the strea
 
 ## Usage
 
+    import sys
     import nonblocking
     
     reader = nonblocking.Reader(sys.stdin, 4096, limit_num_buffered=None, drop_timeout=None, transform_cb=None)
@@ -18,7 +19,7 @@ When constructed, the reader spawns a thread and reads everything from the strea
 
 ### Timestamping
 
-    import time
+    import sys, time
     import nonblocking
     
     reader = nonblocking.Reader(
@@ -30,7 +31,7 @@ When constructed, the reader spawns a thread and reads everything from the strea
     )
 
     while True:
-        print(*reader.read_one()) # shows the timestamp each item was buffered
+        print(*reader.read_one(block=True)) # shows the timestamp each item was buffered
 
 ## Other solutions
 
