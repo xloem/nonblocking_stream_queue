@@ -59,8 +59,10 @@ class Reader:
 
     def block(self, timeout=None, for_ct_read=1):
         with self.condition:
-            if self.queue.qsize() < for_ct_read and self.is_pumping():
-                self.condition.wait(timeout)
+            self.condition.wait_for(
+                lambda: self.queue.qsize() >= for_ct_read or not self.is_pumping(),
+                timeout
+            )
             return self.queue.qsize()
 
     def _pump(self):
