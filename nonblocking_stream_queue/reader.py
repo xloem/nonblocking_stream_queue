@@ -31,6 +31,8 @@ class Reader:
         self.parent_thread = threading.current_thread()
         self.thread = threading.Thread(target=self._pump)
         self.condition = threading.Condition()
+        self.dropped_ct = 0
+        self.dropped_size = 0
         self._is_pumping = True
         self.thread.start()
 
@@ -57,6 +59,16 @@ class Reader:
     def is_pumping(self):
         return self._is_pumping and self.thread.is_alive()
 
+    def any_dropped(self):
+        return self.dropped_ct != 0
+
+    def reset_dropped(self):
+        with self.condition:
+            result = self.dropped_ct, self.dropped_size
+            self.dropped_ct = 0
+            self.dropped_size = 0
+        return result
+
     def block(self, timeout=None, for_ct_read=1):
         with self.condition:
             self.condition.wait_for(
@@ -71,14 +83,18 @@ class Reader:
             
             if data is None:
                 time.sleep(0.01)
-            elif len(data) == 0:
-                break
-            else:
+            else: 
+                datalen = len(data)
+                if datalen == 0:
+                    break
                 if self.transform_cb is not None:
                     data = self.transform_cb(data)
                 try:
                     self.queue.put(data, timeout=self.drop_timeout)
                 except queue.Full:
+                    with self.condition:
+                        self.dropped_ct += 1
+                        self.dropped_size += datalen
                     continue
                 with self.condition:
                     self.condition.notify()
