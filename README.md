@@ -22,7 +22,10 @@ When constructed, the reader spawns a thread and begins reading everything from 
         lines=False, # whether or not to break reads into lines
         max_count=None, # max queued reads
         drop_timeout=None, # time to wait for queue to drain before dropping
-        transform_cb=None # function to pass data through when read
+        drop_older=False, # which end of the queue to drop from
+        pre_cb=None, # if set, data = (pre_cb(), read())
+        post_cb=None, # if set, data = post_cb(data)
+        drop_cb=None, # if set, call with dropped data
     )
 
     print(reader.read_one()) # outputs up to 4096 characters, or None if nothing queued
@@ -38,11 +41,13 @@ When constructed, the reader spawns a thread and begins reading everything from 
     
     reader = nonblocking.Reader(
         sys.stdin.buffer,
-        transform_cb=lambda data: (time.time(), data)
+        pre_cb=lambda: time.time(),
+        post_cb=lambda time_data_tuple: (time_data_tuple[0], time_data_tuple[1], time.time())
     )
 
     while reader.block():
-        print(*reader.read_one()) # shows the timestamp each item was buffered
+        start_time, data, end_time = reader.read_one()
+        print(start_time, data, end_time)
 
 ## Lines
 
