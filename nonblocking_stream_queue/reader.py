@@ -74,7 +74,10 @@ class Reader:
             else:
                 if self.transform_cb is not None:
                     data = self.transform_cb(data)
-                self.queue.put(data, timeout=self.drop_timeout)
+                try:
+                    self.queue.put(data, timeout=self.drop_timeout)
+                except queue.Full:
+                    continue
                 with self.condition:
                     self.condition.notify()
         with self.condition:

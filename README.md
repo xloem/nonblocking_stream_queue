@@ -17,12 +17,12 @@ When constructed, the reader spawns a thread and reads everything from the strea
     import nonblocking_stream_queue as nonblocking
     
     reader = nonblocking.Reader(
-        sys.stdin,
-        max_size=4096,
-        lines=False,
-        max_count=None,
-        drop_timeout=None,
-        transform_cb=None
+        sys.stdin, # object to read from
+        max_size=4096, # max size of each read
+        lines=False, # whether or not to break reads into lines
+        max_count=None, # max queued reads
+        drop_timeout=None, # time to wait for queue to drain before dropping
+        transform_cb=None # function to pass data through when read
     )
 
     print(reader.read_one()) # outputs up to 4096 characters, or None if nothing queued
