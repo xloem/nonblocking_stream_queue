@@ -4,7 +4,7 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'nonblocking_stream_queue'
-version = '0.1.3'
+version = '0.1.4'
 description = 'Nonblocking stream reads using Queue and a pump thread'
 readme = 'README.md'
 classifiers = [

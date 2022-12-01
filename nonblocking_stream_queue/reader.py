@@ -5,7 +5,7 @@ except:
     import Queue as queue # python2
 
 class Reader:
-    def __init__(self, stream, max_size=-1, lines=False, max_count=None, drop_timeout=None, drop_older=False, pre_cb=None, post_cb=None, drop_cb=None):
+    def __init__(self, stream, max_size=-1, lines=False, max_count=None, drop_timeout=None, drop_older=False, pre_cb=None, post_cb=None, drop_cb=None, verbose=False):
         '''
         Wraps a stream to read from it in a nonblocking manner, by using a reader thread, as per
         https://stackoverflow.com/questions/375427/a-non-blocking-read-on-a-subprocess-pipe-in-python/4896288#4896288
@@ -18,6 +18,7 @@ class Reader:
         pre_cb: call this before every read, and tuple it with data
         post_cb: transform data via passing to this callback before buffering
         drop_cb: data will be passed to this when dropped
+        verbose: whether to display buffer usage as a progress meter
         '''
         self.stream = stream
         if lines:
@@ -40,6 +41,11 @@ class Reader:
         self.dropped_ct = 0
         self.dropped_size = 0
         self._is_pumping = True
+        if verbose and max_count:
+            import tqdm
+            self.tqdm = tqdm.tqdm(desc = 'Buffered', total = max_count, unit = 'rd', leave = False)
+        else:
+            self.tqdm = None
         self.thread.start()
 
     def __del__(self):
@@ -129,6 +135,8 @@ class Reader:
                             self.queue.put_nowait((data_len, data))
                 with self.condition:
                     self.condition.notify()
+                    if self.tqdm is not None:
+                        self.tqdm.update(len(self) - self.tqdm.n)
         with self.condition:
             self._is_pumping = False
             self.condition.notify_all()

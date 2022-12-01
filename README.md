@@ -26,6 +26,7 @@ When constructed, the reader spawns a thread and begins reading everything from 
         pre_cb=None, # if set, data = (pre_cb(), read())
         post_cb=None, # if set, data = post_cb(data)
         drop_cb=None, # if set, call with dropped data
+        verbose=False, # if set, display progress filling max_count
     )
 
     print(reader.read_one()) # outputs up to 4096 characters, or None if nothing queued
